@@ -1,15 +1,14 @@
 package kr.ac.jejunu;
 
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+
+import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.sql.*;
 
 public class ProductDao {
 
-    private  ConnectionMaker connectionMaker;
-
-    public ProductDao(ConnectionMaker connectionMaker)
-    {
-        this.connectionMaker = connectionMaker;
-    }
+    private DataSource dataSource;
 
     public ProductDao()
     {
@@ -17,7 +16,7 @@ public class ProductDao {
     }
 
     public Product get(Long id) throws ClassNotFoundException, SQLException {
-        Connection connection = connectionMaker.getConnection();
+        Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("select * from product where id = ?");
         preparedStatement.setLong(1, id);
         ResultSet resultSet = preparedStatement.executeQuery();
@@ -33,7 +32,7 @@ public class ProductDao {
     }
 
     public void add(Product product) throws SQLException, ClassNotFoundException {
-        Connection connection = connectionMaker.getConnection();
+        Connection connection = dataSource.getConnection();
 
         PreparedStatement preparedStatement = connection.prepareStatement("insert into product(id, title, price) values(?, ?, ?)");
         preparedStatement.setLong(1, product.getId());
@@ -46,8 +45,11 @@ public class ProductDao {
         connection.close();
     }
 
+    public void setDataSource(SimpleDriverDataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
-    public void setConnectionMaker(JejuConnectionMaker connectionMaker) {
-        this.connectionMaker = connectionMaker;
+    public DataSource getDataSource() {
+        return dataSource;
     }
 }
