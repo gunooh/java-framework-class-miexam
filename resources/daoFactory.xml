@@ -13,7 +13,7 @@
     <bean id="jdbcContext" class="kr.ac.jejunu.JdbcContext">
         <property name="dataSource" ref="dataSource"></property>
     </bean>
-    <bean id="connectionMaker" class="kr.ac.jejunu.ProductDao"></bean>
+
     <bean id="productDao" class="kr.ac.jejunu.ProductDao">
         <property name="jdbcContext" ref="jdbcContext"></property>
     </bean>

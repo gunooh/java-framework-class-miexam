@@ -10,32 +10,71 @@ import java.util.Random;
 public class ProductDao {
     private JdbcContext jdbcContext;
 
-    public ProductDao()
-    {
-
+    public ProductDao() {
     }
 
-    public Product get(Long id) throws ClassNotFoundException, SQLException {
-        StatementStrategy statementStrategy = new GetProductStatementStrategy(id);
-        return jdbcContext.jdbcContextWithStatementStrategyForQuery(statementStrategy);
+    public Product get(final Long id) throws ClassNotFoundException, SQLException {
+        return jdbcContext.jdbcContextWithStatementStrategyForQuery(new StatementStrategy() {
+            String query = "select * from product where id = ?";
+            Object[] params = {id};
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException, SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                for(int i=1; i<=params.length; i++)
+                {
+                    preparedStatement.setObject(i, params[i-1]);
+                }
+                return preparedStatement;
+            }
+        });
     }
 
-
-
-    public void add(Product product) throws SQLException, ClassNotFoundException {
-        StatementStrategy statementStrategy = new AddProductStatementStrategy(product);
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(statementStrategy);
+    public void add(final Product product) throws SQLException, ClassNotFoundException {
+        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
+            String query = "insert into product(id, title, price) values(?, ?, ?)";
+            Object[] params = {product.getId(), product.getTitle(), product.getPrice()};
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                for(int i=1; i<=params.length; i++)
+                {
+                    preparedStatement.setObject(i, params[i-1]);
+                }
+                return preparedStatement;
+            }
+        });
     }
 
-
-    public void delete(Long id) throws SQLException {
-        StatementStrategy statementStrategy = new DeleteProductStatementStrategy(id);
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(statementStrategy);
+    public void delete(final Long id) throws SQLException {
+        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
+            String query = "delete from product where id = ?";
+            Object[] params = {id};
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                for(int i=1; i<=params.length; i++)
+                {
+                    preparedStatement.setObject(i, params[i-1]);
+                }
+                return preparedStatement;
+            }
+        });
     }
 
-    public void update(Product product) throws SQLException {
-        StatementStrategy statementStrategy = new UpdateProductStatementStrategy(product);
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(statementStrategy);
+    public void update(final Product product) throws SQLException {
+        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
+            String query = "update product set title = ?, price = ? where id =?";
+            Object[] params = {product.getTitle(), product.getPrice(), product.getId()};
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                for(int i=1; i<=params.length; i++)
+                {
+                    preparedStatement.setObject(i, params[i-1]);
+                }
+                return preparedStatement;
+            }
+        });
     }
 
     public void setJdbcContext(JdbcContext jdbcContext) {
