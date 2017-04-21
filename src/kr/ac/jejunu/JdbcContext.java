@@ -89,4 +89,19 @@ public class JdbcContext {
 
         return product;
     }
+
+    public void update(final String query, final Object[] params) throws SQLException {
+        jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
+
+            @Override
+            public PreparedStatement makeStatement(Connection connection) throws SQLException {
+                PreparedStatement preparedStatement = connection.prepareStatement(query);
+                for(int i=1; i<=params.length; i++)
+                {
+                    preparedStatement.setObject(i, params[i-1]);
+                }
+                return preparedStatement;
+            }
+        });
+    }
 }

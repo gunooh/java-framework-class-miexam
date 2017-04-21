@@ -30,51 +30,24 @@ public class ProductDao {
     }
 
     public void add(final Product product) throws SQLException, ClassNotFoundException {
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
-            String query = "insert into product(id, title, price) values(?, ?, ?)";
-            Object[] params = {product.getId(), product.getTitle(), product.getPrice()};
-            @Override
-            public PreparedStatement makeStatement(Connection connection) throws SQLException {
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                for(int i=1; i<=params.length; i++)
-                {
-                    preparedStatement.setObject(i, params[i-1]);
-                }
-                return preparedStatement;
-            }
-        });
+        final String query = "insert into product(id, title, price) values(?, ?, ?)";
+        final Object[] params = {product.getId(), product.getTitle(), product.getPrice()};
+
+        jdbcContext.update(query, params);
     }
 
     public void delete(final Long id) throws SQLException {
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
-            String query = "delete from product where id = ?";
-            Object[] params = {id};
-            @Override
-            public PreparedStatement makeStatement(Connection connection) throws SQLException {
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                for(int i=1; i<=params.length; i++)
-                {
-                    preparedStatement.setObject(i, params[i-1]);
-                }
-                return preparedStatement;
-            }
-        });
+        final String query = "delete from product where id = ?";
+        final Object[] params = {id};
+
+        jdbcContext.update(query, params);
     }
 
     public void update(final Product product) throws SQLException {
-        jdbcContext.jdbcContextWithStatementStrategyForUpdate(new StatementStrategy() {
-            String query = "update product set title = ?, price = ? where id =?";
-            Object[] params = {product.getTitle(), product.getPrice(), product.getId()};
-            @Override
-            public PreparedStatement makeStatement(Connection connection) throws SQLException {
-                PreparedStatement preparedStatement = connection.prepareStatement(query);
-                for(int i=1; i<=params.length; i++)
-                {
-                    preparedStatement.setObject(i, params[i-1]);
-                }
-                return preparedStatement;
-            }
-        });
+        final String query = "update product set title = ?, price = ? where id =?";
+        final Object[] params = {product.getTitle(), product.getPrice(), product.getId()};
+
+        jdbcContext.update(query, params);
     }
 
     public void setJdbcContext(JdbcContext jdbcContext) {
