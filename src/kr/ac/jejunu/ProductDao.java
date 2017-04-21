@@ -6,9 +6,9 @@ public class ProductDao {
 
     private  ConnectionMaker connectionMaker;
 
-    public ProductDao()
+    public ProductDao(ConnectionMaker connectionMaker)
     {
-        connectionMaker = new JejuConnectionMaker();
+        this.connectionMaker = connectionMaker;
     }
 
     public Product get(Long id) throws ClassNotFoundException, SQLException {
