@@ -11,6 +11,7 @@ import java.util.Random;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertNull;
 
 public class ProductDaoTest {
 
@@ -52,6 +53,39 @@ public class ProductDaoTest {
         assertThat(id, is(addedProduct.getId()));
         assertThat(title, is(addedProduct.getTitle()));
         assertThat(price, is(addedProduct.getPrice()));
+    }
+
+    @Test
+    public void delete() throws SQLException, ClassNotFoundException {
+        Long id = Long.valueOf(new Random().nextInt());
+        String title = "제주감귤";
+        Integer price = 15000;
+
+        Product product = new Product();
+        product.setId(id);
+        product.setTitle(title);
+        product.setPrice(price);
+
+        productDao.delete(id);
+        Product deleteProduct = productDao.get(id);
+
+        assertNull(productDao.get(id));
+    }
+
+    @Test
+    public void update() throws SQLException, ClassNotFoundException {
+        Long id = Long.valueOf(new Random().nextInt());
+        String title = "제주감귤";
+        Integer price = 15000;
+
+        Product product = new Product();
+        product.setId(id);
+        product.setTitle(title);
+        product.setPrice(price);
+
+        productDao.update(id);
+
+        Product updateProduct = productDao.get(id);
     }
 
 }
