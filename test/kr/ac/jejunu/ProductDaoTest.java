@@ -36,6 +36,7 @@ public class ProductDaoTest {
         assertThat(price, is(product.getPrice()));
     }
 
+    @Test
     public void add() throws SQLException, ClassNotFoundException {
         Long id = Long.valueOf(new Random().nextInt());
         String title = "제주감귤";
@@ -66,6 +67,8 @@ public class ProductDaoTest {
         product.setTitle(title);
         product.setPrice(price);
 
+        productDao.add(product);
+
         productDao.delete(id);
         Product deleteProduct = productDao.get(id);
 
@@ -83,9 +86,22 @@ public class ProductDaoTest {
         product.setTitle(title);
         product.setPrice(price);
 
-        productDao.update(id);
+        productDao.add(product);
+
+        String updateTitle = "제주한라봉";
+        Integer updatePrice =  30000;
+
+        product.setId(id);
+        product.setTitle(updateTitle);
+        product.setPrice(updatePrice);
+
+        productDao.update(product);
 
         Product updateProduct = productDao.get(id);
+
+        assertThat(id, is(updateProduct.getId()));
+        assertThat(updateTitle, is(updateProduct.getTitle()));
+        assertThat(updatePrice, is(updateProduct.getPrice()));
     }
 
 }
