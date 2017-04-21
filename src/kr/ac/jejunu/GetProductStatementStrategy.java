@@ -8,13 +8,18 @@ import java.sql.SQLException;
  * Created by PARK on 2017-04-21.
  */
 public class GetProductStatementStrategy implements StatementStrategy {
+    private Long id;
+    public GetProductStatementStrategy(Long id)
+    {
+        this.id = id;
+    }
 
-        @Override
-        public PreparedStatement makeStatement(Object object, Connection connection) throws SQLException, SQLException {
-            PreparedStatement preparedStatement = connection.prepareStatement("select * from product where id = ?");
-            preparedStatement.setLong(1, (Long) object);
-            return preparedStatement;
-        }
+    @Override
+    public PreparedStatement makeStatement(Connection connection) throws SQLException, SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("select * from product where id = ?");
+        preparedStatement.setLong(1, id);
+        return preparedStatement;
+    }
 
 
 }
