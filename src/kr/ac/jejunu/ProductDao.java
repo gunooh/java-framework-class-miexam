@@ -11,6 +11,11 @@ public class ProductDao {
         this.connectionMaker = connectionMaker;
     }
 
+    public ProductDao()
+    {
+
+    }
+
     public Product get(Long id) throws ClassNotFoundException, SQLException {
         Connection connection = connectionMaker.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("select * from product where id = ?");
@@ -42,4 +47,7 @@ public class ProductDao {
     }
 
 
+    public void setConnectionMaker(JejuConnectionMaker connectionMaker) {
+        this.connectionMaker = connectionMaker;
+    }
 }
